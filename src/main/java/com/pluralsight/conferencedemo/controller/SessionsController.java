@@ -2,6 +2,7 @@ package com.pluralsight.conferencedemo.controller;
 
 import com.pluralsight.conferencedemo.model.Session;
 import com.pluralsight.conferencedemo.repository.SessionRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +40,12 @@ public class SessionsController {
     @DeleteMapping("{id}")
     public void deleteSession(@PathVariable("id") Long id) {
         sessionRepository.deleteById(id);
+    }
+
+    @PutMapping("{id}")
+    public Session putSession(@PathVariable("id") Long id, @RequestBody Session session) {
+        Session existingSession = sessionRepository.getReferenceById(id);
+        BeanUtils.copyProperties(session, existingSession, "id");
+        return sessionRepository.saveAndFlush(existingSession);
     }
 }
