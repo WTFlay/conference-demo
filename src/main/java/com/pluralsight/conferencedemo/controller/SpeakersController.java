@@ -2,6 +2,7 @@ package com.pluralsight.conferencedemo.controller;
 
 import com.pluralsight.conferencedemo.model.Speaker;
 import com.pluralsight.conferencedemo.repository.SpeakerRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +39,12 @@ public class SpeakersController {
     @DeleteMapping("{id}")
     public void deleteSpeaker(@PathVariable("id") Long id) {
         speakerRepository.deleteById(id);
+    }
+
+    @PutMapping("{id}")
+    public Speaker putSpeaker(@PathVariable("id") Long id, @RequestBody final Speaker speaker) {
+        Speaker existingSpeaker = speakerRepository.getReferenceById(id);
+        BeanUtils.copyProperties(speaker, existingSpeaker, "id");
+        return speakerRepository.saveAndFlush(existingSpeaker);
     }
 }
