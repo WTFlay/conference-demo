@@ -34,4 +34,9 @@ public class SpeakersController {
     public Speaker postSpeaker(@RequestBody final Speaker speaker) {
         return speakerRepository.saveAndFlush(speaker);
     }
+
+    @DeleteMapping("{id}")
+    public void deleteSpeaker(@PathVariable("id") Long id) {
+        speakerRepository.deleteById(id);
+    }
 }
